@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+# 1. Check if gems are missing, if so, install them
+bundle check || bundle install
+
+# 2. DB prpare
+./bin/rails db:prepare
+
+# 3. Execute the CMD
+exec "$@"

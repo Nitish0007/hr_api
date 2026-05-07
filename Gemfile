@@ -62,5 +62,6 @@ end
 gem 'kaminari'
 gem 'redis', '~> 5.0'
 gem 'dotenv'
+gem 'activerecord-import'
 # gem 'sidekiq'
 
