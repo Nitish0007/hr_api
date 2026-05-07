@@ -1,0 +1,41 @@
+services:
+  hr_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    env_file: .env.dev
+    depends_on:
+      hrdb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+
+  hrdb:
+    image: postgres:18
+    env_file: .env.dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - hr_db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - hr_redis_data:/data
+
+volumes:
+  hr_db_data:
+  hr_redis_data:
+  bundle_cache:
