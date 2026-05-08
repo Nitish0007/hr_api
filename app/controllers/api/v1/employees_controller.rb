@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [:update]
+  before_action :set_employee, only: [:show, :update]
 
   def index
     employees = Employee.page(params[:page] || 1).per(params[:per_page] || 10)
@@ -8,6 +8,9 @@ class Api::V1::EmployeesController < ApplicationController
     }, status: :ok
   end
 
+  def show
+    render json: { data: @employee }, status: :ok
+  end
 
   def create
     employee = Employee.new(employee_params)
