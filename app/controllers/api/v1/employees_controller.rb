@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :update]
+  before_action :set_employee, only: [:show, :update, :destroy]
 
   def index
     employees = Employee.page(params[:page] || 1).per(params[:per_page] || 10)
@@ -36,6 +36,14 @@ class Api::V1::EmployeesController < ApplicationController
       render json: { message: "Updated successfully", data: @employee }, status: :ok
     else
       render json: { errors: @employee.errors.full_messages }, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    if @employee.destroy
+      render json: { message: "Employee deleted successfully" }, status: :ok
+    else
+      render json: { errors: ["Failed to delete employee"] }, status: :unprocessable_content
     end
   end
 
