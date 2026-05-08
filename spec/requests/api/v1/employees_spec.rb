@@ -43,14 +43,15 @@ RSpec.describe "Employees API", type: :request do
         expect(json_body["errors"]).to include("Email has already been taken")
       end
 
-      it "fails when employee_code already exists" do
+      it "ignores client-provided employee_code and assigns a new unique code" do
         expect {
-          post "/api/v1/employees", params: { 
-            employee: valid_attributes.merge(employee_code: employee.employee_code) 
+          post "/api/v1/employees", params: {
+            employee: valid_attributes.merge(employee_code: employee.employee_code)
           }
-        }.not_to change(Employee, :count)
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(json_body["errors"]).to include("Employee code has already been taken")
+        }.to change(Employee, :count).by(1)
+        expect(response).to have_http_status(:created)
+        new_employee = Employee.order(:id).last
+        expect(new_employee.employee_code).not_to eq(employee.employee_code)
       end
     end
   end
@@ -82,13 +83,12 @@ RSpec.describe "Employees API", type: :request do
       expect(json_body["errors"]).to include("Email has already been taken")
     end
 
-    it "returns error when trying to update employee_code" do
+    it "does not change employee_code when client sends a different value" do
+      original_code = employee.employee_code
       patch "/api/v1/employees/#{employee.id}", params: { employee: { employee_code: "NEW-CODE-123" } }
-      
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(json_body["errors"]).to include("Employee code cannot be changed")
-      
-      expect(employee.reload.employee_code).not_to eq("NEW-CODE-123")
+
+      expect(response).to have_http_status(:success)
+      expect(employee.reload.employee_code).to eq(original_code)
     end
   end
 
