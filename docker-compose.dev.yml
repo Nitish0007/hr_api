@@ -35,6 +35,20 @@ services:
     volumes:
       - hr_redis_data:/data
 
+  hr_api_test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env.test
+    depends_on:
+      hrdb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+
 volumes:
   hr_db_data:
   hr_redis_data:
