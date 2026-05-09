@@ -43,3 +43,7 @@ end
 duration = Time.current - start_time
 puts "Time taken: #{(duration * 1000).round(2)} ms"
 puts "Done! Total employees: #{Employee.count}" # This line is to test the script ran successfully or not
+
+# before running the seed script, you need to generate the source files first
+# Command to run: docker compose -f docker-compose.dev.yml exec hr_api bin/rake data:generate_source_files
+# Command to run seed script: docker compose -f docker-compose.dev.yml exec hr_api bin/rake db:seed

@@ -9,4 +9,5 @@ namespace :data do
 end
 
 # before running the seed script, you need to generate the source files first
-# Command to run: docker compose exec hr_api bin/rake data:generate_source_files
+# Command to run: docker compose -f docker-compose.dev.yml exec hr_api bin/rake data:generate_source_files
+# Command to run seed script: docker compose -f docker-compose.dev.yml exec hr_api bin/rake db:seed

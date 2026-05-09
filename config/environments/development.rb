@@ -23,8 +23,13 @@ Rails.application.configure do
     config.action_controller.perform_caching = false
   end
 
-  # Change to :null_store to avoid any caching.
-  config.cache_store = :memory_store
+  # RedisCacheStore is fault-tolerant: if Redis is down or unreachable (e.g. wrong host in Docker),
+  # reads are misses and writes are dropped — you still get 200s but analytics will query DB every time.
+  # In Docker Compose, REDIS_URL must use the Redis service hostname (see docker-compose.dev.yml).
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_URL") { "redis://localhost:6379/0" },
+    namespace: "hr_api_#{Rails.env}"
+  }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
