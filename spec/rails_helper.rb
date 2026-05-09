@@ -83,6 +83,10 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     DatabaseCleaner.cleaning { example.run }
   end
+
+  config.before do
+    Rails.cache.clear if Rails.cache.respond_to?(:clear)
+  end
 end
 
 Shoulda::Matchers.configure do |config|
