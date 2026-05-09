@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :update, :destroy]
+  before_action :set_employee, only: [ :show, :update, :destroy ]
 
   def index
     employees = Employee.page(params[:page] || 1).per(params[:per_page] || 10)
@@ -39,7 +39,7 @@ class Api::V1::EmployeesController < ApplicationController
     if @employee.destroy
       render_success(nil, message: "Employee deleted successfully")
     else
-      render_error(errors: ["Failed to delete employee"])
+      render_error(errors: [ "Failed to delete employee" ])
     end
   end
 

@@ -43,19 +43,18 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  gem 'rspec-rails', '~> 6.1'
-  gem 'factory_bot_rails'
-  gem 'faker'
-  gem 'bullet'
-  gem 'pry-rails'
-  gem 'shoulda-matchers', '~> 6.0'
-  gem 'database_cleaner-active_record'
-  gem 'simplecov', require: false
+  gem "rspec-rails", "~> 6.1"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "bullet"
+  gem "pry-rails"
+  gem "shoulda-matchers", "~> 6.0"
+  gem "database_cleaner-active_record"
+  gem "simplecov", require: false
 end
 
-gem 'kaminari'
-gem 'redis', '~> 5.0'
-gem 'dotenv'
-gem 'activerecord-import'
+gem "kaminari"
+gem "redis", "~> 5.0"
+gem "dotenv"
+gem "activerecord-import"
 # gem 'sidekiq'
-

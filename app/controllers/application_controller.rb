@@ -33,5 +33,4 @@ class ApplicationController < ActionController::API
       total_pages: records.total_pages
     }
   end
-
 end

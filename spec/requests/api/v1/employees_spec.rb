@@ -22,7 +22,7 @@ RSpec.describe "Employees API", type: :request do
       end
     end
 
-    
+
     context "with invalid parameters" do
       it "does not create an Employee and returns error" do
         expect {
@@ -35,8 +35,8 @@ RSpec.describe "Employees API", type: :request do
     context "with duplicate data" do
       it "fails when email already exists" do
         expect {
-          post "/api/v1/employees", params: { 
-            employee: valid_attributes.merge(email: employee.email) 
+          post "/api/v1/employees", params: {
+            employee: valid_attributes.merge(email: employee.email)
           }
         }.not_to change(Employee, :count)
         expect(response).to have_http_status(:unprocessable_content)
@@ -70,7 +70,7 @@ RSpec.describe "Employees API", type: :request do
     it "updates correctly with valid params" do
       patch "/api/v1/employees/#{employee.id}", params: update_params
       expect(response).to have_http_status(:success)
-      
+
       employee.reload
       expect(employee.first_name).to eq("Nitish")
       expect(employee.email).to eq(new_email)
@@ -78,7 +78,7 @@ RSpec.describe "Employees API", type: :request do
 
     it "returns error when updating email to one that already exists" do
       patch "/api/v1/employees/#{employee.id}", params: { employee: { email: another_employee.email } }
-      
+
       expect(response).to have_http_status(:unprocessable_content)
       expect(json_body["errors"]).to include("Email has already been taken")
     end
@@ -95,7 +95,7 @@ RSpec.describe "Employees API", type: :request do
   describe "GET /api/v1/employees/:id" do
     it "returns the requested employee" do
       get "/api/v1/employees/#{employee.id}"
-      
+
       expect(response).to have_http_status(:ok)
       expect(json_body["data"]["id"]).to eq(employee.id)
     end

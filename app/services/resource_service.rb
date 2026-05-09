@@ -1,7 +1,7 @@
 class ResourceService
   attr_accessor :name, :errors
 
-  def initialize name
+  def initialize(name)
     @errors = []
     @errors << "Resource name required" if name.blank?
     @errors << "Invalid 'resource' name" unless valid_resources.include?(name)

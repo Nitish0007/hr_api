@@ -9,8 +9,8 @@ last_names  = File.readlines('last_names.txt', chomp: true)
 BATCH_SIZE = 2000
 TOTAL_RECORDS = 10_000
 
-job_titles = ["Software Engineer", "DevOps Engineer", "Data Analyst", "Product manager", "Scrum Master"]
-countries = ["IN", "US", "AU", "CA", "EN"]
+job_titles = [ "Software Engineer", "DevOps Engineer", "Data Analyst", "Product manager", "Scrum Master" ]
+countries = [ "IN", "US", "AU", "CA", "EN" ]
 
 (TOTAL_RECORDS/BATCH_SIZE).times do |batch_num|
   now = Time.current
