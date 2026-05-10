@@ -14,8 +14,7 @@ Devise.setup do |config|
   config.navigational_formats = []
   config.parent_controller = "ApplicationController"
 
-  jwt_secret = Rails.application.credentials.dig(:devise_jwt_secret_key).presence ||
-               ENV["DEVISE_JWT_SECRET_KEY"].presence
+  jwt_secret = ENV["DEVISE_JWT_SECRET_KEY"].presence || Rails.application.credentials.dig(:devise_jwt_secret_key).presence
 
   if jwt_secret.blank?
     unless Rails.env.development? || Rails.env.test?
