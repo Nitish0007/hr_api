@@ -1,31 +1,53 @@
 services:
-  hr_api:
-    build: .
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hr_api:latest
     ports:
-      - "80:80"
-    env_file: .env
+      - "${WEB_PUBLISH_PORT:-3000}:3000"
+    environment:
+      environment:
+        RAILS_ENV: ${RAILS_ENV:-production}
+        PORT: ${PORT:-3000}
+        SOLID_QUEUE_IN_PUMA: ${SOLID_QUEUE_IN_PUMA:-1}
+        DATABASE_URL: ${DATABASE_URL}
+        REDIS_URL: ${REDIS_URL}
+        ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
     depends_on:
-      - hrdb
-      - redis
-    volumes:
-      - ./tmp:/rails/tmp
-      - ./log:/rails/log
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
 
-  hrdb:
-    image: postgres:15
-    env_file: .env
-    ports:
-      - "5432:5432"
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-hr_api_production}
     volumes:
-      - hr_db_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-hr_api_production}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
 
   redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - hr_redis_data:/data
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
-  hr_db_data:
-  hr_redis_data:
+  postgres_data:
+  redis_data:

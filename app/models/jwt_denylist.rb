@@ -8,4 +8,3 @@ class JwtDenylist < ApplicationRecord
     where(arel_table[:exp].lt(Time.current)).in_batches(of: 1_000, &:delete_all)
   end
 end
-

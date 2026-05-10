@@ -40,9 +40,8 @@
 # Ignore development files
 /.devcontainer
 
-# Ignore Docker-related files
+# Ignore Docker-related metadata (Dockerfile must remain available to the client for builds)
 /.dockerignore
-/Dockerfile*
 
 # Ignore coverage directory
 /coverage/
