@@ -1,8 +1,16 @@
 #!/bin/bash -e
 
 # If running the rails server then create or migrate existing database
+rails_server_start=false
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+  rails_server_start=true
+elif [ "${1}" == "./bin/thrust" ] && [ "${2}" == "./bin/rails" ] && [ "${3}" == "server" ]; then
+  rails_server_start=true
+fi
+
+# If the rails server is starting, then prepare the database
+if [ "$rails_server_start" = true ]; then
+  ./bin/rails db:migrate
 fi
 
 exec "${@}"

@@ -64,6 +64,6 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Puma reads PORT (Railway, Fly, etc. set this). Thruster can wrap the server for HTTP/2 + compression.
 # Override CMD if your platform needs a different bind (e.g. only `./bin/rails server -b 0.0.0.0`).
-ENV PORT=3000
-EXPOSE 3000
+ENV PORT=8080
+EXPOSE 8080
 CMD ["./bin/thrust", "./bin/rails", "server"]

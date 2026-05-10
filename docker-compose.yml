@@ -5,11 +5,11 @@ services:
       dockerfile: Dockerfile
     image: hr_api:latest
     ports:
-      - "${WEB_PUBLISH_PORT:-3000}:3000"
+      - "${WEB_PUBLISH_PORT:-8080}:8080"
     environment:
       environment:
         RAILS_ENV: ${RAILS_ENV:-production}
-        PORT: ${PORT:-3000}
+        PORT: ${PORT:-8080}
         SOLID_QUEUE_IN_PUMA: ${SOLID_QUEUE_IN_PUMA:-1}
         DATABASE_URL: ${DATABASE_URL}
         REDIS_URL: ${REDIS_URL}
