@@ -16,6 +16,10 @@ class AnalyticsCache
       "job_title_avg/#{code}/#{title}"
     end
 
+    def dashboard_statistics_key
+      "dashboard_statistics"
+    end
+
     def delete_country_salary(country_code)
       Rails.cache.delete(country_salary_key(country_code))
     end
@@ -25,6 +29,7 @@ class AnalyticsCache
     end
 
     def invalidate_for_employee(employee)
+      invalidate_dashboard_statistics
       countries = []
       pairs = []
 
@@ -48,6 +53,10 @@ class AnalyticsCache
 
       countries.compact.uniq.each { |c| delete_country_salary(c) }
       pairs.uniq.each { |(c, j)| delete_job_title_average(c, j) if c.present? && j.present? }
+    end
+
+    def invalidate_dashboard_statistics
+      Rails.cache.delete(dashboard_statistics_key)
     end
   end
 end

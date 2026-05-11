@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :public_resources, only: [] do
         get :allowed_resource_list, on: :collection
       end
+      resources :dashboards, only: :index
     end
   end
 end

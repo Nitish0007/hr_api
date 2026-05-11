@@ -20,6 +20,14 @@ class AnalyticsService
     end
   end
 
+  def dashboard_statistics
+    result = Rails.cache.fetch(AnalyticsCache.dashboard_statistics_key, expires_in: AnalyticsCache::EXPIRATION) do
+      compute_dashboard_statistics
+    end
+
+    result
+  end
+
   private
 
   def compute_country_salary_statistics(country_code)
@@ -78,6 +86,22 @@ class AnalyticsService
       job_title: job_title,
       employee_count: 0,
       average_salary: nil
+    }
+  end
+
+  def compute_dashboard_statistics
+    result = Employee.select(
+      "COUNT(*) AS total_employees",
+      "AVG(salary) AS average_salary",
+      "COUNT(DISTINCT department) AS total_departments",
+      "COUNT(DISTINCT country) AS total_countries"
+    ).take.attributes.symbolize_keys
+
+    {
+      total_employees: result[:total_employees],
+      average_salary: result[:average_salary],
+      total_departments: result[:total_departments],
+      total_countries: result[:total_countries]
     }
   end
 end
